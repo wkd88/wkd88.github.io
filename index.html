@@ -1,1 +1,548 @@
-<h1>test </h1>
+<!DOCTYPE html>
+<html lang="en">
+<!-- <head>
+<meta charset="utf-8">
+<meta name="generator" content="Hugo 0.66.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<link rel="stylesheet" href="../css/normalize.css">
+<link rel="stylesheet" href="../css/skeleton.css">
+<link rel="stylesheet" href="../css/custom.css">
+<link rel="alternate" href="index.xml" type="application/rss+xml" title="Speech Research">
+<link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
+
+<title >CoMoSpeech: One-Step Speech and Singing Voice Synthesis via Consistency Model - Speech Research</title>
+</head> -->
+<head>
+	<meta charset="utf-8">
+	<meta name="generator" content="Hugo 0.88.1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href=""https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+  
+	<link rel="stylesheet" href="css/custom.css">
+	<link rel="stylesheet" href="css/normalize.css">
+
+	<title>SlimSpeech: Lightweight and Efficient Text-to-Speech with Slim Rectified Flow</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<!-- 
+<body rightmargin="100" leftmargin="100" topmargin="50" bottommargin="100" line-height:160%>
+<font size="5"> -->
+ 
+<div class="container">
+  
+
+	<header role="banner">
+		
+			
+		
+		
+	</header>
+
+
+	<main role="main">
+		<article itemscope itemtype="https://schema.org/BlogPosting">
+
+            <h1 class="entry-title" itemprop="headline" align="center" ><font color="145d93"  ><b>SlimSpeech: Lightweight and Efficient Text-to-Speech with Slim Rectified Flow</b></font></h1>
+			
+			<section itemprop="entry-text">
+				<br>
+
+<div class="container pt-5 mt-5 shadow p-5 mb-5 bg-white rounded"> 
+
+  <h2 id="abstract" style="text-align:center;"><font color="145d93">Abstract</font></h2>
+  <style>
+    .centered-link {
+      text-align: center;
+    }
+  </style>
+  
+<!--   <div class="centered-link">
+    <a href="https://github.com/">CODE LINK</a>
+  </div> -->
+  <p style="text-align: justify;"><font color="061E61"> Recently, flow matching based speech synthesis has significantly enhanced the quality of synthesized speech while reducing the number of inference steps. In this paper, we introduce SlimSpeech, a lightweight and efficient speech synthesis system based on rectified flow. We have built upon the existing speech synthesis method utilizing the rectified flow model, modifying its structure to reduce parameters and serve as a teacher model. By refining the reflow operation, we directly derive a smaller model with a more straight sampling trajectory from the larger model, while utilizing distillation techniques to further enhance the model performance. Experimental results demonstrate that our proposed method, with significantly reduced model parameters, achieves comparable performance to larger models through one-step sampling.</font></p>
+  <!-- <br></br> -->
+  <!-- <br></br> -->
+</div>
+<div class="container pt-5 mt-5 shadow p-5 mb-5 bg-white rounded"> 
+<h2 id="TTS" style="text-align:center;"><font color="145d93">Text-to-Speech results</font></h2>
+<p style="text-align: justify;"><font color="061E61"> The below audio samples show the comparison between GT,  FastSpeech 2, Grad-TTS, Matcha-TTS, Reflow-TTS, 2-ReFlow-TTS, SlimFlow-TTS and <b> our SlimSpeech (1step, 4step) </b> . Samples are selected from the test dataset of LJSpeech. 
+<ul style="list-style-type:square">
+<!--
+<li><font color="061E61"> For each dataset, the same HiFi-GAN vocoder pretrained on GT mel is used for all methods. </font></li>
+-->
+<!--<li>
+<font color="061E61"> Each generated sample has been normalized, and the raw recording is shown in Recordings. </font></li>
+-->
+<!--<li>
+<li><font color="061E61"> Our method ResGrad uses FastSpeech 2 as the initial predictor for estimating mel-spectrogram. </font></li>
+-->
+<!-- <li><font color="061E61"> The number of inference steps used by diffusion models is shown behind the name of models. For example, ResGrad-4 stands for ResGrad with 4 inference steps. But FastSpeech 2 is a model name instead of denoting the number of inference steps. </font></li> -->
+<!-- <li><font color="061E61"> For each dataset, the inference speed measured by the real-time factor (RTF) is shown in the brackets of the first case. </font></li> -->
+<!-- <li><font color="061E61"> In order to improve the inference speed at each sampling step, ResGrad uses the same U-Net architecture in GradTTS but with twice fewer channels to reduce the model size (2.0M in ResGrad vs 7.6M in GradTTS). </font></li> -->
+</ul>
+
+<!-- <br></br>
+<p><b><font color="145d93">LJSpeech: A dataset contains the recordings from a female speaker at a sampling rate of 22.05kHz.</font></b></p> -->
+<br></br>
+
+<p><em><font color="061E62">Sample 1: Charles Thomas White, awaiting execution for arson, made a desperate effort to escape from Newgate in 1827.</font></em></p>
+<table align="center">
+<thead>
+<tr>
+<th style="font-weight: normal;text-align: center">GT</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/vocoder/LJ016-0008.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+</tr>
+</tbody>
+</table>
+
+
+<table align="center">
+  <thead>
+  <tr>
+  <th style="font-weight: normal;text-align: center">Reflow-TTS (RK45 Solver)<br> (179 steps, 27.09M)</th>
+  <th style="font-weight: normal;text-align: center">SlimFlow-TTS (RK45 Solver) <br> (164 steps, 17.61M)</th>
+  <th style="font-weight: normal;text-align: center">Grad-TTS <br> (4 steps, 14.86M)</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/1-reflowtts-rk45/LJ016-0008.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+  <td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/slimflowtts/LJ016-0008.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+  <td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/gradtts-4step/LJ016-0008.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+  </tr>
+  </tbody>
+</table>
+
+
+<table align="center">
+  <thead>
+  <tr>
+  <th style="font-weight: normal;text-align: center">Matcha-TTS <br> (4 steps, 18.22M)</th>
+  <th style="font-weight: normal;text-align: center">2-Reflow-TTS <br> (4 steps, 27.09M)</th>
+  <th style="text-align: center">SlimSpeech <br> (4 steps, 5.48M)</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/matchatts-4/LJ016-0008.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+  <td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/2-reflowtts-4step/LJ016-0008.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+  <td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/slimspeech-4/LJ016-0008.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+</tr>
+  </tbody>
+</table>
+
+
+<table align="center">
+<thead>
+<tr>
+<th style="font-weight: normal;text-align: center">FastSpeech 2 <br> (1 step, 28.83M)</th>
+<th style="font-weight: normal;text-align: center">Grad-TTS <br> (1 step, 14.86M)</th>
+<th style="font-weight: normal;text-align: center">Matcha-TTS <br> (1 step, 18.22M)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/fastspeech/LJ016-0008.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+<td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/gradtts-1step/LJ016-0008.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+<td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/matchatts-1/LJ016-0008.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+</tr>
+</tbody>
+</table>
+	
+<table align="center">
+<thead>
+<tr>
+<th style="font-weight: normal;text-align: center">Reflow-TTS <br> (1 step, 27.09M)</th>
+<th style=" font-weight: normal;text-align: center"> 2-Reflow-TTS <br> (1 step, 27.09M)</th>
+<th style="text-align: center">SlimSpeech <br> (1 step, 5.48M)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/1-reflowtts-1step/LJ016-0008.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+<td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/2-reflowtts-1step/LJ016-0008.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+<td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/slimspeech-1/LJ016-0008.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+</tr>
+</tbody>
+</table>
+<br></br>
+
+<p><em><font color="061E62">Sample 2: Another helpful feature of unemployment insurance is the incentive it will give to employers to plan more carefully.</font></em></p>
+<table align="center">
+<thead>
+<tr>
+<th style="font-weight: normal;text-align: center">GT</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/vocoder/LJ022-0068.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+</tr>
+</tbody>
+</table>
+
+
+<table align="center">
+  <thead>
+  <tr>
+  <th style="font-weight: normal;text-align: center">Reflow-TTS (RK45 Solver)<br> (179 steps, 27.09M)</th>
+  <th style="font-weight: normal;text-align: center">SlimFlow-TTS (RK45 Solver) <br> (164 steps, 17.61M)</th>
+  <th style="font-weight: normal;text-align: center">Grad-TTS <br> (4 steps, 14.86M)</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/1-reflowtts-rk45/LJ022-0068.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+  <td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/slimflowtts/LJ022-0068.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+  <td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/gradtts-4step/LJ022-0068.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+  </tr>
+  </tbody>
+</table>
+
+
+<table align="center">
+  <thead>
+  <tr>
+  <th style="font-weight: normal;text-align: center">Matcha-TTS <br> (4 steps, 18.22M)</th>
+  <th style="font-weight: normal;text-align: center">2-Reflow-TTS <br> (4 steps, 27.09M)</th>
+  <th style="text-align: center">SlimSpeech <br> (4 steps, 5.48M)</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/matchatts-4/LJ022-0068.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+  <td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/2-reflowtts-4step/LJ022-0068.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+  <td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/slimspeech-4/LJ022-0068.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+</tr>
+  </tbody>
+</table>
+
+
+<table align="center">
+<thead>
+<tr>
+<th style="font-weight: normal;text-align: center">FastSpeech 2 <br> (1 step, 28.83M)</th>
+<th style="font-weight: normal;text-align: center">Grad-TTS <br> (1 step, 14.86M)</th>
+<th style="font-weight: normal;text-align: center">Matcha-TTS <br> (1 step, 18.22M)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/fastspeech/LJ022-0068.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+<td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/gradtts-1step/LJ022-0068.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+<td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/matchatts-1/LJ022-0068.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+</tr>
+</tbody>
+</table>
+	
+<table align="center">
+<thead>
+<tr>
+<th style="font-weight: normal;text-align: center">Reflow-TTS <br> (1 step, 27.09M)</th>
+<th style=" font-weight: normal;text-align: center"> 2-Reflow-TTS <br> (1 step, 27.09M)</th>
+<th style="text-align: center">SlimSpeech <br> (1 step, 5.48M)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/1-reflowtts-1step/LJ022-0068.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+<td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/2-reflowtts-1step/LJ022-0068.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+<td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/slimspeech-1/LJ022-0068.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+</tr>
+</tbody>
+</table>
+
+
+<br></br>
+<p><em><font color="061E62">Sample 3: While it was apparently intended for publication in the United States, and is in many respects critical of certain aspects of life in the Soviet Union,</font></em></p>
+<table align="center">
+<thead>
+<tr>
+<th style="font-weight: normal;text-align: center">GT</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/vocoder/LJ042-0154.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+</tr>
+</tbody>
+</table>
+
+
+<table align="center">
+  <thead>
+  <tr>
+  <th style="font-weight: normal;text-align: center">Reflow-TTS (RK45 Solver)<br> (179 steps, 27.09M)</th>
+  <th style="font-weight: normal;text-align: center">SlimFlow-TTS (RK45 Solver) <br> (164 steps, 17.61M)</th>
+  <th style="font-weight: normal;text-align: center">Grad-TTS <br> (4 steps, 14.86M)</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/1-reflowtts-rk45/LJ042-0154.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+  <td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/slimflowtts/LJ042-0154.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+  <td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/gradtts-4step/LJ042-0154.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+  </tr>
+  </tbody>
+</table>
+
+
+<table align="center">
+  <thead>
+  <tr>
+  <th style="font-weight: normal;text-align: center">Matcha-TTS <br> (4 steps, 18.22M)</th>
+  <th style="font-weight: normal;text-align: center">2-Reflow-TTS <br> (4 steps, 27.09M)</th>
+  <th style="text-align: center">SlimSpeech <br> (4 steps, 5.48M)</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+  <td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/matchatts-4/LJ042-0154.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+  <td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/2-reflowtts-4step/LJ042-0154.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+  <td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/slimspeech-4/LJ042-0154.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+</tr>
+  </tbody>
+</table>
+
+
+<table align="center">
+<thead>
+<tr>
+<th style="font-weight: normal;text-align: center">FastSpeech 2 <br> (1 step, 28.83M)</th>
+<th style="font-weight: normal;text-align: center">Grad-TTS <br> (1 step, 14.86M)</th>
+<th style="font-weight: normal;text-align: center">Matcha-TTS <br> (1 step, 18.22M)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/fastspeech/LJ042-0154.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+<td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/gradtts-1step/LJ042-0154.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+<td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/matchatts-1/LJ042-0154.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+</tr>
+</tbody>
+</table>
+	
+<table align="center">
+<thead>
+<tr>
+<th style="font-weight: normal;text-align: center">Reflow-TTS <br> (1 step, 27.09M)</th>
+<th style=" font-weight: normal;text-align: center"> 2-Reflow-TTS <br> (1 step, 27.09M)</th>
+<th style="text-align: center">SlimSpeech <br> (1 step, 5.48M)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/1-reflowtts-1step/LJ042-0154.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+<td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/2-reflowtts-1step/LJ042-0154.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+<td style=" text-align: center"><audio controls="controls" ><source src="SlimSpeech/slimspeech-1/LJ042-0154.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+
+ 
+ 
+
+ 
+<div class="container pt-5 mt-5 shadow p-5 mb-5 bg-white rounded"> 
+<h2 id="TTS" style="text-align:center;"><font color="145d93">Ablation study</font></h2>
+<p style="text-align: center;"><font color="061E61"> In this section, we conduct ablation experiments to demonstrate the effectiveness of annealing reflow and flow-guided distillation.
+<ul style="list-style-type:square">
+
+<!-- <ul style="list-style-type:square"> --> 
+<br></br>
+ 
+<p><em><font color="061E61">  Sample 1: Charles Thomas White, awaiting execution for arson, made a desperate effort to escape from Newgate in 1827.</font></em></p>
+<table align="center">
+<thead>
+<tr>
+<th style="text-align: center">student model (RK45 Solver)<br> (96 steps, 5.48M)</th>
+<th style="font-weight: normal;text-align: center"> w/o anealing reflow (RK45 Solver)<br> (96 steps, 5.48M)</th>
+
+
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center"><audio controls="controls" ><source src="SlimSpeech/annealingflowtts/LJ016-0008.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+<td style="text-align: center"><audio controls="controls" ><source src="SlimSpeech/ablation_annealingflowtts/LJ016-0008.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+
+</tr>
+</tbody>
+</table>
+
+
+<table align="center">
+<thead>
+<tr>
+<th style="text-align: center">SlimSpeech <br> (1 step, 5.48M)</th>
+<th style="font-weight: normal;text-align: center"> w/o $\mathcal{L}_{2\text{-step}}$ <br> (1 step, 5.48M)</th>
+<th style="font-weight: normal;text-align: center"> w/o $\mathcal{L}_{2\text{-step}} + \mathcal{L}_{Distill}$ <br> (1 step, 5.48M)</th>
+
+
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center"><audio controls="controls" ><source src="SlimSpeech/slimspeech-1/LJ016-0008.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+<td style="text-align: center"><audio controls="controls" ><source src="SlimSpeech/no2step/LJ016-0008.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+<td style="text-align: center"><audio controls="controls" ><source src="SlimSpeech/nodistill/LJ016-0008.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+
+</tr>
+</tbody>
+</table>
+
+<br></br>
+ 
+<p><em><font color="061E61">  Sample 2: Another helpful feature of unemployment insurance is the incentive it will give to employers to plan more carefully.</font></em></p>
+<table align="center">
+<thead>
+<tr>
+<th style="text-align: center">student model (RK45 Solver)<br> (96 steps, 5.48M)</th>
+<th style="font-weight: normal;text-align: center"> w/o anealing reflow (RK45 Solver)<br> (96 steps, 5.48M)</th>
+
+
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center"><audio controls="controls" ><source src="SlimSpeech/annealingflowtts/LJ022-0068.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+<td style="text-align: center"><audio controls="controls" ><source src="SlimSpeech/ablation_annealingflowtts/LJ022-0068.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+
+</tr>
+</tbody>
+</table>
+
+
+<table align="center">
+<thead>
+<tr>
+<th style="text-align: center">SlimSpeech<br> (1 step, 5.48M)</th>
+<th style="font-weight: normal;text-align: center"> w/o $\mathcal{L}_{2\text{-step}}$<br> (1 step, 5.48M)</th>
+<th style="font-weight: normal;text-align: center"> w/o $\mathcal{L}_{2\text{-step}} + \mathcal{L}_{Distill}$ <br> (1 step, 5.48M)</th>
+
+
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center"><audio controls="controls" ><source src="SlimSpeech/slimspeech-1/LJ022-0068.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+<td style="text-align: center"><audio controls="controls" ><source src="SlimSpeech/no2step/LJ022-0068.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+<td style="text-align: center"><audio controls="controls" ><source src="SlimSpeech/nodistill/LJ022-0068.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+
+</tr>
+</tbody>
+</table>
+<br></br>
+ 
+<p><em><font color="061E61">  Sample 3: While it was apparently intended for publication in the United States, and is in many respects critical of certain aspects of life in the Soviet Union,</font></em></p>
+<table align="center">
+<thead>
+<tr>
+<th style="text-align: center">student model (RK45 Solver)<br> (96 steps, 5.48M)</th>
+<th style="font-weight: normal;text-align: center"> w/o anealing reflow (RK45 Solver)<br> (96 steps, 5.48M)</th>
+
+
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center"><audio controls="controls" ><source src="SlimSpeech/annealingflowtts/LJ042-0154.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+<td style="text-align: center"><audio controls="controls" ><source src="SlimSpeech/ablation_annealingflowtts/LJ042-0154.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+
+</tr>
+</tbody>
+</table>
+
+
+<table align="center">
+<thead>
+<tr>
+<th style="text-align: center">SlimSpeech<br> (1 step, 5.48M)</th>
+<th style="font-weight: normal;text-align: center">w/o $\mathcal{L}_{2\text{-step}}$<br> (1 step, 5.48M)</th>
+<th style="font-weight: normal;text-align: center"> w/o $\mathcal{L}_{2\text{-step}} + \mathcal{L}_{Distill}$<br> (1 step, 5.48M)</th>
+
+
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center"><audio controls="controls" ><source src="SlimSpeech/slimspeech-1/LJ042-0154.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+<td style="text-align: center"><audio controls="controls" ><source src="SlimSpeech/no2step/LJ042-0154.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+<td style="text-align: center"><audio controls="controls" ><source src="SlimSpeech/nodistill/LJ042-0154.wav" autoplay/>Your browser does not support the audio element.</audio></td>
+
+</tr>
+</tbody>
+</table>
+</p>
+
+			</section>
+		</article>
+	</main>
+
+
+	
+
+</div>
+
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-139981676-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+<script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+         HTML: ["input/TeX","output/HTML-CSS"],
+         TeX: {
+                Macros: {
+                         bm: ["\\boldsymbol{#1}", 1],
+                         argmax: ["\\mathop{\\rm arg\\,max}\\limits"],
+                         argmin: ["\\mathop{\\rm arg\\,min}\\limits"]},
+                extensions: ["AMSmath.js","AMSsymbols.js"],
+                equationNumbers: { autoNumber: "AMS" } },
+         extensions: ["tex2jax.js"],
+         jax: ["input/TeX","output/HTML-CSS"],
+         tex2jax: { inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+                    processEscapes: true },
+         "HTML-CSS": { availableFonts: ["TeX"],
+                       linebreaks: { automatic: true } }
+     });
+ </script>
+
+ <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+       tex2jax: {
+         skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+       }
+     });
+ </script>
+
+ <script type="text/javascript" async
+   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML">
+ </script>
+
+
+
+
+</body>
+</html>
